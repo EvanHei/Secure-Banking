@@ -1,5 +1,5 @@
 # Secure-Banking
-
+This program allows a user to view their bank account balance, history, make desposits, and make withdrawls securely by using cryptographic techniques such as encryption, digital signatures, and authentication protocols.
 ## Requirements
 The following libraries must be installed:
 
