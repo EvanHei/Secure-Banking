@@ -33,4 +33,4 @@ Enter "123456" for the valid user ID and "password" for the password.
 
 
 ## Notes
-All files other than the Python files and this README contain the public/private keys for the ATMs and bank.
+All files other than the Python files and this README contain the public/private keys for the ATMs and bank. The bank only holds one account, and transaction history does not persist after server termination.
