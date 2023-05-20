@@ -1,4 +1,5 @@
 import socket
+import pwinput
 from Cryptodome.PublicKey import RSA
 from Cryptodome.Cipher import PKCS1_OAEP
 from Cryptodome.Signature import pkcs1_15
@@ -123,7 +124,7 @@ elif signingChoice == 2:
 ############# USER CREDENTIAL VALIDATION ###############
 # get credentials
 userId = input("ID: ")
-password = input("Password: ")
+password = pwinput.pwinput(prompt="Password: ")
 userCredentials = userId + password
 sendData(userCredentials)
 

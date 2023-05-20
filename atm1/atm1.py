@@ -1,4 +1,5 @@
 import socket
+import pwinput
 from Cryptodome.PublicKey import RSA
 from Cryptodome.Cipher import PKCS1_OAEP
 from Cryptodome.Signature import pkcs1_15
@@ -107,7 +108,6 @@ while signingChoice not in range(1, 3):
 	signingChoice = int(input("Please enter a valid choice: "))
 
 # send choice
-print("Sending choice: " + str(signingChoice))
 atmSock.send(str(signingChoice).encode())
 
 # choose RSA/DSA functions
@@ -121,7 +121,7 @@ elif signingChoice == 2:
 ############# USER CREDENTIAL VALIDATION ###############
 # get credentials
 userId = input("ID: ")
-password = input("Password: ")
+password = pwinput.pwinput(prompt="Password: ")
 userCredentials = userId + password
 sendData(userCredentials)
 
