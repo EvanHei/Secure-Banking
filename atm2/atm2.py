@@ -1,5 +1,6 @@
 import socket
 import pwinput
+import os
 from Cryptodome.PublicKey import RSA
 from Cryptodome.Cipher import PKCS1_OAEP
 from Cryptodome.Signature import pkcs1_15
@@ -55,6 +56,11 @@ def receiveDataDsa():
 	return decryptedData
 
 
+# clear the terminal screen
+def clearScreen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+
 ############# CRYPTOGRAPHIC TOOLS ###############
 # key files
 BANK_RSA_PUBLIC_KEY_FILE_NAME = "bank_rsa_public_key.pem"
@@ -106,6 +112,8 @@ reEncryptedNonce = encryptionCipher.encrypt(nonce)
 atmSock.send(reEncryptedNonce)
 
 ############# SIGNING SCHEME ###############
+clearScreen()
+
 # choose a DSA or RSA signing schema
 signingChoice = int(input("1. RSA\n2. DSA\nChoose a digital signature scheme: "))
 
@@ -128,6 +136,8 @@ elif signingChoice == 2:
 	receiveData = receiveDataDsa
 
 ############# USER CREDENTIAL VALIDATION ###############
+clearScreen()
+
 # get credentials
 userId = input("ID: ")
 password = pwinput.pwinput(prompt="Password: ")
@@ -144,12 +154,15 @@ else:
 
 ############# TRANSACTION PROCESSING ###############
 while runAgain.upper() == "Y":
+
+	clearScreen()
 	print('''
 1. Display Account Balance
 2. Make a Deposit
 3. Make a Withdrawal
 4. Display Transaction History
 5. Quit''')
+       
 	choice = input("Enter your choice: ")
 	# validate input
 	while int(choice) not in range(1, 6):
