@@ -10,56 +10,77 @@ from OpenSSL import crypto
 ############# FUNCTIONS ###############
 # accept a data string, encrypts, creates a digital signature, and sends it to the atm
 def sendDataRsa(data):
+	print("\nsendDataRsa(...) -----------------")
+
 	encryptedData = bankEncryptionCipher.encrypt(data.encode())
 	digest = SHA256.new(data.encode())
 	digSig = pkcs1_15.new(bankPrivateKey).sign(digest)
+
+	print("\nPlaintext data to be sent: " + str(data))
 	print("\nCreated digest: " + str(digest))
 	print("\nSending digital signature:\n" + str(digSig))
 	print("\nSending encrypted data:\n" + str(encryptedData))
+
 	atmSock.send(encryptedData)
 	atmSock.send(digSig)
 
 	
 def sendDataDsa(data):
+	print("\nsendDataDsa(...) -----------------")
+
 	encryptedData = bankEncryptionCipher.encrypt(data.encode())
 	digSig = crypto.sign(bankDsaPrivateKey, data.encode(), 'sha256')
+
+	print("\nPlaintext data:\n" + str(data))
 	print("\nSending digital signature:\n" + str(digSig))
 	print("\nSending encrypted data:\n" + str(encryptedData))
+
 	atmSock.send(encryptedData)
 	atmSock.send(digSig)
 
 	
 # receives a data string and digital signature, decrypts, and validates signature. Returns decrypted data
 def receiveDataRsa():
+	print("\nreceiveDataRsa(...) -----------------")
+
 	encryptedData = atmSock.recv(1024)
 	digSig = atmSock.recv(1024)
 	decryptedData = bankDecryptionCipher.decrypt(encryptedData).decode('ascii')
 	computedDigest = SHA256.new(decryptedData.encode())
+
+	print("\nReceived encrypted data:\n" + str(encryptedData))
 	print("\nReceived digital signature:\n" + str(digSig))
-	print("\nComputed digest:\n" + str(computedDigest))
+	print("\nComputed digest: " + str(computedDigest))
 	print("\nDecrypted data: " + decryptedData)
+
 	try:
 		pkcs1_15.new(atmPublicKey).verify(computedDigest, digSig)
 		print("\nValid digital signature.")
 	except (ValueError, TypeError):
 		atmSock.close()
 		print("Invalid digital signature, closing ATM connection.")
+
 	return decryptedData
 
 
 def receiveDataDsa():
+	print("\nreceiveDataDsa(...) -----------------")
+
 	encryptedData = atmSock.recv(1024)
 	digSig = atmSock.recv(1024)
 	decryptedData = bankDecryptionCipher.decrypt(encryptedData).decode('ascii')
+
 	print("\nReceived encrypted data:\n" + str(encryptedData))
 	print("\nReceived digital signature:\n" + str(digSig))
 	print("\nDecrypted data: " + str(decryptedData))
+
 	try:
 		crypto.verify(atmCertificate, digSig, decryptedData.encode(), 'sha256')
 		print("Valid digital signature.")
 	except:
 		atmSock.close()
 		print("Invalid digital signature, closing ATM connection.")
+		
 	return decryptedData
 
 

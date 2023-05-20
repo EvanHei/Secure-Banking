@@ -12,6 +12,7 @@ def sendDataRsa(data):
 	encryptedData = encryptionCipher.encrypt(data.encode())
 	digest = SHA256.new(data.encode())
 	digSig = pkcs1_15.new(atmPrivateKey).sign(digest)
+
 	atmSock.send(encryptedData)
 	atmSock.send(digSig)
 
@@ -19,6 +20,7 @@ def sendDataRsa(data):
 def sendDataDsa(data):
 	encryptedData = encryptionCipher.encrypt(data.encode())
 	digSig = crypto.sign(atmDsaPrivateKey, data.encode(), 'sha256')
+
 	atmSock.send(encryptedData)
 	atmSock.send(digSig)
 
@@ -29,11 +31,13 @@ def receiveDataRsa():
 	digSig = atmSock.recv(1024)
 	decryptedData = decryptionCipher.decrypt(encryptedData).decode('ascii')
 	computedDigest = SHA256.new(decryptedData.encode())
+
 	try:
 		pkcs1_15.new(bankPublicKey).verify(computedDigest, digSig)
 	except (ValueError, TypeError):
 		atmSock.close()
 		print("Invalid digital signature, closing ATM connection.")
+
 	return decryptedData
 
 
@@ -41,11 +45,13 @@ def receiveDataDsa():
 	encryptedData = atmSock.recv(1024)
 	digSig = atmSock.recv(1024)
 	decryptedData = decryptionCipher.decrypt(encryptedData).decode('ascii')
+
 	try:
 		crypto.verify(bankCertificate, digSig, decryptedData.encode(), 'sha256')
 	except:
 		atmSock.close()
 		print("Invalid digital signature, closing ATM connection.")
+
 	return decryptedData
 
 
@@ -69,7 +75,7 @@ file.close()
 encryptionCipher = PKCS1_OAEP.new(bankPublicKey, hashAlgo=None, mgfunc=None, randfunc=None)
 decryptionCipher = PKCS1_OAEP.new(atmPrivateKey, hashAlgo=None, mgfunc=None, randfunc=None)
 
-# load bank's DSA certificate and this atm1's DSA private key
+# load bank's DSA certificate and this atm2's DSA private key
 file = open(BANK_DSA_CERTIFICATE_PUBLIC_KEY_FILE_NAME)
 bankCertificateBuffer = file.read()
 file.close()
@@ -90,7 +96,7 @@ atmSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 atmSock.connect((BANK_IP, BANK_PORT))
 
 ############# ATM AUTHENTICATION ###############
-# send ID of this atm1
+# send ID of this atm2
 atmSock.send("atm2".encode())
 
 # receive the encrypted nonce, decrypt, re-encrypt, and send it back
