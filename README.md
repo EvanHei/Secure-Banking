@@ -6,28 +6,32 @@ The following libraries must be installed:
 ### Linux Ubuntu
 * `sudo pip install pycryptodomex`
 * `sudo pip install pyopenssl`
+* `sudo pip install pwinput`
 
 ### Windows
 * `pip install pycryptodomex`
 * `pip install pyopenssl`
+* `pip install pwinput`
 
 ## Instructions
+Run the commands below in a terminal:
+
 ### Linux Ubuntu
-`python3 bank.py - start the bank server`
+1. `python3 bank.py` - start the bank server
 
-`python3 atm1.py - connect with ATM 1`
+2. `python3 atm1.py` - connect with ATM 1
 
-`python3 atm2.py - connect with ATM 2`
+3. `python3 atm2.py` - connect with ATM 2
 
 Enter "123456" for the valid user ID and "password" for the password.
 
 
 ### Windows
-`python .\bank.py - start the bank server`
+1. `python .\bank.py` - start the bank server
 
-`python .\atm1.py - connect with ATM 1`
+2. `python .\atm1.py` - connect with ATM 1
 
-`python .\atm2.py - connect with ATM 2`
+3. `python .\atm2.py` - connect with ATM 2
 
 Enter "123456" for the valid user ID and "password" for the password.
 
