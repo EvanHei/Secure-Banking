@@ -1,5 +1,5 @@
 # Secure-Banking
-This program allows a user to view their bank account balance, history, make desposits, and make withdrawls securely by using cryptographic techniques such as encryption, digital signatures, and authentication protocols.
+Secure Banking is a prototype command-line app that allows users to log into an ATM to view their bank account balance, history, desposit, and withdrawl funds securely using cryptographic techniques such as encryption, digital signatures, and authentication protocols.
 ## Requirements
 The following libraries must be installed:
 
